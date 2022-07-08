@@ -3,8 +3,15 @@ import { DownOutlined } from '@ant-design/icons';
 import {util} from "./util/util";
 import {Avatar, Button, Dropdown} from "antd";
 import { Layout,Menu ,Tabs,Affix,Space} from 'antd';
+import {Crud} from "./crud";
 const { Header, Footer, Sider, Content } = Layout;
 const { TabPane } = Tabs;
+window.onmessage = (e,orgin)=>{
+    console.info("onmessage",e,orgin);
+    if(e && e.data === "login"){
+        util.go("/login")
+    }
+}
 class Home extends React.Component{
     constructor(props) {
         super(props);
@@ -113,13 +120,13 @@ class Home extends React.Component{
                         </Space>
                     </Dropdown>
                 </div>
-                <Menu mode={"inline"} style={{border:"none",marginTop:"64px"}}>
+                <Menu mode={"vertical"} style={{border:"none",marginTop:"64px"}}>
                     {this.state.user.menus.map((menu,index)=>{
                         return this.buildMenu(menu)
                     })}
                 </Menu>
             </Sider>
-            <Layout style={{height:"100%"}}>
+            <Layout style={{height:"100%",borderLeft:"1px solid #ddd"}}>
                 <Content>
                     <Tabs activeKey={this.state.activeKey}
                           style={{height:"100%",width:"100%"}}
@@ -142,20 +149,20 @@ class Home extends React.Component{
                               })
                           }}>关闭全部</Button>}
                     >
-                        <TabPane tab="首页" key="index" style={{height:"100%",width:"100%"}} >
-                            <iframe src={util.server+"/admin/lyear_main.html"}
-                                    style={{height:"100%",width:"100%"}}
-                                    frameBorder={0}
-                            ></iframe>
+                        <TabPane tab="首页" key="index" style={{height:"100%",overflow:"auto",width:"100%",background:"white"}} >
+                            首页
                         </TabPane>
                         {
                             this.state.tabs.map((tab,index)=>{
                                 return <TabPane
                                 tab={tab.menuName} key={tab.id+""} style={{height:"100%",width:"100%"}} >
-                                    <iframe src={util.server+tab.url}
-                                            style={{height:"100%",width:"100%"}}
-                                            frameBorder={0}
-                                    ></iframe>
+                                    {
+                                        <iframe
+                                                src={util.server+tab.url}
+                                                style={{height:"100%",width:"100%"}}
+                                                frameBorder={0}
+                                        ></iframe>
+                                    }
                                 </TabPane>
                             })
                         }
