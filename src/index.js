@@ -6,6 +6,7 @@ import "./index.css";
 import {BrowserRouter} from "react-router-dom";
 import App from "./app";
 
+console.info("环境",process.env.REACT_APP_BASE_URL)
 moment.locale('zh-cn');
 
 ReactDOM.render(

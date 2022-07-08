@@ -3,7 +3,7 @@ import { Modal,Spin,message} from 'antd';
 import ReactDOM from 'react-dom';
 import qs from 'qs';
 const globalConfig = {
-    server:"http://localhost:8180"
+    server:process.env.REACT_APP_BASE_URL
 };
 const util = {};
 util.navigate = null;
