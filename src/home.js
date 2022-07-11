@@ -110,8 +110,8 @@ class Home extends React.Component{
                     <Avatar src={util.server+this.state.user.avatar} size={"large"}></Avatar>
                     <Dropdown overlay={
                             <Menu>
-                                <Menu.Item onClick={()=>{this.updatePassword()}}>修改密码</Menu.Item>
-                                <Menu.Item onClick={this.logout}>退出系统</Menu.Item>
+                                <Menu.Item key={"updatePassword"} onClick={()=>{this.updatePassword()}}>修改密码</Menu.Item>
+                                <Menu.Item key={"logout"} onClick={this.logout}>退出系统</Menu.Item>
                             </Menu>
                         }>
                         <Space>
