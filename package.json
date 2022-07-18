@@ -22,8 +22,8 @@
     "start:test": "dotenv -e test.env react-scripts start",
     "start:prod": "dotenv -e prod.env react-scripts start",
     "build": "react-scripts build",
-    "build:test": "dotenv -e .env.test react-scripts build",
-    "build:prod": "dotenv -e .env.prod react-scripts build",
+    "build:test": "dotenv -e test.env react-scripts build",
+    "build:prod": "dotenv -e prod.env react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
