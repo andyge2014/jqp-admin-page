@@ -1,9 +1,8 @@
 import React from "react";
-import { DownOutlined } from '@ant-design/icons';
+import {DownOutlined} from '@ant-design/icons';
 import {util} from "./util/util";
-import {Avatar, Button, Dropdown} from "antd";
-import { Layout,Menu ,Tabs,Affix,Space} from 'antd';
-import {Crud} from "./crud";
+import {Avatar, Button, Dropdown, Input, Layout, Menu, Space, Tabs} from "antd";
+
 const { Header, Footer, Sider, Content } = Layout;
 const { TabPane } = Tabs;
 window.onmessage = (e,orgin)=>{
@@ -91,6 +90,9 @@ class Home extends React.Component{
         }
     }
     buildMenu(menu){
+        if(menu.flag === false){
+            return null;
+        }
         if(menu.children && menu.children.length > 0){
             return <Menu.SubMenu key={menu.id} title={menu.menuName}>
                 {
@@ -103,10 +105,37 @@ class Home extends React.Component{
             return <Menu.Item onClick={()=>{this.addTab(menu)}} key={menu.id}>{menu.menuName}</Menu.Item>
         }
     }
+    filterMenu(text,menus){
+        let init=false;
+        if(!menus){
+            menus = this.state.user.menus;
+            init = true;
+        }
+        let flag = false;
+        for(let i=0;i<menus.length;i++){
+            let menu = menus[i]
+            let curFlag = false;
+            if(text == "" || menu.menuName.indexOf(text)>-1){
+                curFlag = true;
+                flag = true;
+            }
+            if(menu.children != null && menu.children.length>0){
+                menu.flag = this.filterMenu(text,menu.children) || curFlag;
+            }else{
+                menu.flag = curFlag;
+            }
+        }
+        if(init){
+            this.setState({
+                user:this.state.user
+            })
+        }
+        return text == "" || flag;
+    }
     render() {
         return <Layout  style={{position:"absolute",height:"100%",width:"100%"}}>
             <Sider theme={"light"} style={{height:"100%",overflowX:"hidden",borderRight:"1px slid #ddd"}}>
-                <div style={{position:"fixed",width:"200px",zIndex:2,height:"64px",padding:"10px",top:0,background:"white",textAlign:"center"}}>
+                <div style={{position:"fixed",width:"200px",zIndex:2,height:"89px",padding:"10px",top:0,background:"white",textAlign:"center"}}>
                     <Avatar src={util.server+this.state.user.avatar} size={"large"}></Avatar>
                     <Dropdown overlay={
                             <Menu>
@@ -119,8 +148,12 @@ class Home extends React.Component{
                             <DownOutlined />
                         </Space>
                     </Dropdown>
+                    <Input placeholder={"关键字搜索"} onChange={(e)=>{
+                        this.filterMenu(e.target.value);
+                    }}/>
                 </div>
-                <Menu mode={"vertical"} style={{border:"none",marginTop:"64px"}}>
+
+                <Menu mode={"inline"} style={{border:"none",marginTop:"89px"}}>
                     {this.state.user.menus.map((menu,index)=>{
                         return this.buildMenu(menu)
                     })}
