@@ -24,8 +24,8 @@ https://gitee.com/hyz79/jqp-doc
 ## 前后端不分离版本
 https://gitee.com/hyz79/jqp-admin
 
-### 前后端分离版本-前端
+## 前后端分离版本-前端
 https://gitee.com/hyz79/jqp-admin-page
 
-### 前后端分离版本-后端
+## 前后端分离版本-后端
 https://gitee.com/hyz79/jqp-admin-rest
