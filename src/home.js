@@ -1,8 +1,7 @@
-import React from "react";
+import React,{Suspense} from "react";
 import {DownOutlined} from '@ant-design/icons';
 import {util} from "./util/util";
 import {Avatar, Button, Dropdown, Input, Layout, Menu, Space, Tabs} from "antd";
-
 const { Header, Footer, Sider, Content } = Layout;
 const { TabPane } = Tabs;
 window.onmessage = (e,orgin)=>{
@@ -11,6 +10,8 @@ window.onmessage = (e,orgin)=>{
         util.go("/login")
     }
 }
+
+
 class Home extends React.Component{
     constructor(props) {
         super(props);
@@ -144,7 +145,7 @@ class Home extends React.Component{
                             </Menu>
                         }>
                         <Space>
-                            <span >{this.state.user.name}</span>
+                            <span>{this.state.user.name}</span>
                             <DownOutlined />
                         </Space>
                     </Dropdown>
@@ -153,7 +154,7 @@ class Home extends React.Component{
                     }}/>
                 </div>
 
-                <Menu mode={"inline"} style={{border:"none",marginTop:"89px"}}>
+                <Menu mode={"inline"} style={{border:"none",marginTop:"120px"}}>
                     {this.state.user.menus.map((menu,index)=>{
                         return this.buildMenu(menu)
                     })}
@@ -190,11 +191,26 @@ class Home extends React.Component{
                                 return <TabPane
                                 tab={tab.menuName} key={tab.id+""} style={{height:"100%",width:"100%"}} >
                                     {
-                                        <iframe
-                                                src={util.server+tab.url}
-                                                style={{height:"100%",width:"100%"}}
-                                                frameBorder={0}
-                                        ></iframe>
+                                        (()=>{
+                                            let cmp = null;
+                                            if(tab.url.startsWith("/")){
+                                                cmp = <iframe
+                                                    src={util.server+tab.url}
+                                                    style={{height:"100%",width:"100%"}}
+                                                    frameBorder={0}
+                                                ></iframe>;
+                                            }else if(tab.url.startsWith("http")){
+                                                cmp = <iframe
+                                                    src={tab.url}
+                                                    style={{height:"100%",width:"100%"}}
+                                                    frameBorder={0}
+                                                ></iframe>;
+                                            }else{
+                                                const OtherComp = React.lazy(async ()=> import("./"+tab.url));
+                                                cmp = <Suspense fallback={<div>Loading ....</div>}><OtherComp/></Suspense>
+                                            }
+                                            return cmp;
+                                        })()
                                     }
                                 </TabPane>
                             })
